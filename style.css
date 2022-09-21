@@ -1,0 +1,119 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    background-color: yellow;
+    padding: 20px;
+}
+
+header h1{
+    font-size: 2.5rem;
+}
+
+.new-client{
+    display: flex;
+    justify-content: center;
+}
+
+.new-client button{
+    width: 500px;
+    padding: 10px 0;
+    margin: 10px 0;
+}
+
+.client{
+    max-width: 500px;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px auto;
+    box-shadow: 0 0 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customer-information p{
+    margin: 5px 0;
+}
+
+.btn-delete-edit{
+    max-width: 200px;
+}
+
+.btn-delete-edit button{
+    padding: 5px 10px;
+}
+
+#modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* display: flex; apagar */
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#modal > div {
+    width: 80%;
+    height: 300px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.modal-newClient{
+    position: relative;
+}
+
+.modal-newClient > button{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 70px;
+    padding: 5px 10px;
+    margin: 0;
+}
+
+.client-data{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.client-data p{
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.client-data input{
+    width: 80%;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.client-data button{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.desative{
+    display: none;
+}
+
+.active{
+    display: flex;
+}

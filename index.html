@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>CRUD - Javascript</title>
+  </head>
+  <body>
+    <header>
+      <h1>Clientes</h1>
+    </header>
+
+    <main>
+      <div class="new-client">
+        <button id="newClient" onclick="hideModal()">Novo</button>
+        <div id="modal" class="desative">
+            <div class="modal-newClient">
+                <button id="closeModal" onclick="hideModal()">Fechar</button>
+                <div class="client-data">
+                    <p>Novo Cliente</p>
+                    <input type="text" placeholder="Nome" id="name">
+                    <input type="text" placeholder="Idade" id="age">
+                    <button id="addClient" onclick="createClient()">Adicionar</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div id="customers"></div>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
