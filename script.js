@@ -42,12 +42,18 @@ const loadCustomers = () => {
   return JSON.parse(localStorage.getItem(SAVE_CUSTOMERS));
 };
 
+//READ
+const readClient = () => {
+  return loadCustomers();
+};
+
 //CREATE
 const createClient = () => {
   const newClient = new Client(inputName.value, inputAge.value);
-  customers.push(newClient);
-  saveCustomers(customers);
-  readClient();
+  const DB_CUSTOMERS = readClient() ? readClient() : [];
+  DB_CUSTOMERS.push(newClient);
+  saveCustomers(DB_CUSTOMERS);
+  createListCustomers();
 };
 
 //CREATE LIST CUSTOMERS
@@ -70,15 +76,10 @@ const createListCustomers = () => {
         </div>
       </div>
       `;
-    });
+    }).reverse();
   } else {
     customerList.innerHTML = '<div id="empty">VAZIO</div>';
   }
-};
-
-//READ
-const readClient = () => {
-  return loadCustomers();
 };
 
 //FIND ID
@@ -87,11 +88,11 @@ const findId = (e) => {
     const [action, index] = e.target.id.split("-");
 
     if (action === "edit") {
-      const customers = loadCustomers();
-      fillInputs(customers[index]);
+      const CUSTOMERS_DB = readClient();
+      fillInputs(CUSTOMERS_DB[index]);
     }
     if (action === "delete") {
-      console.log("delete");
+      deleteClient(index);
     }
   }
 };
@@ -101,7 +102,6 @@ const fillInputs = (client) => {
   document.getElementById("nameEdit").value = client.name;
   document.getElementById("ageEdit").value = client.age;
   document.getElementById("id").value = client.id;
-  console.log(client.id);
   hideEdit();
 };
 
@@ -121,7 +121,7 @@ const saveNewCustomerData = () => {
 const updateClient = (index, data) => {
   const CUSTOMERS_DB = readClient();
   CUSTOMERS_DB[index] = {
-    id: data.id,
+    id: parseInt(data.id),
     name: data.name ? data.name : CUSTOMERS_DB[index].name,
     age: data.age ? data.age : CUSTOMERS_DB[index].age,
   };
@@ -131,9 +131,12 @@ const updateClient = (index, data) => {
 
 //DELETE
 const deleteClient = (id) => {
-  const registeredCustomers = customers.filter((client) => client.id !== id);
-  console.log("Usuário excluído com sucesso!");
-  readClient();
+  const CUSTOMERS_DB = readClient();
+  const registeredCustomers = CUSTOMERS_DB.filter(
+    (client) => client.id !== parseInt(id)
+  );
+  saveCustomers(registeredCustomers);
+  createListCustomers();
 };
 
 // createClient("New Client", "Age");
