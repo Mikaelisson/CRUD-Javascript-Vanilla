@@ -53,7 +53,11 @@ header h1{
     padding: 5px 10px;
 }
 
-#modal{
+.client{
+    position: relative;
+}
+
+#modal, #editClient{
     position: fixed;
     top: 0;
     left: 0;
@@ -63,9 +67,10 @@ header h1{
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
-#modal > div {
+#modal > div, .edit {
     width: 80%;
     height: 300px;
     padding: 20px;
@@ -73,11 +78,11 @@ header h1{
     border-radius: 5px;
 }
 
-.modal-newClient{
+.modal-newClient, .edit{
     position: relative;
 }
 
-.modal-newClient > button{
+.modal-newClient > button, .edit > button {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -86,26 +91,26 @@ header h1{
     margin: 0;
 }
 
-.client-data{
+.client-data, .edit > div{
     display: flex;
     flex-direction: column;
     margin-top: 20px;
 }
 
-.client-data p{
+.client-data p, .edit > div > p{
     font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.client-data input{
+.client-data input, .edit > div > input{
     width: 80%;
     margin: 10px auto;
     padding: 10px;
 }
 
-.client-data button{
+.client-data button, .edit > div > button{
     width: 80%;
     margin: 0 auto;
 }
@@ -116,4 +121,10 @@ header h1{
 
 .active{
     display: flex;
+}
+
+#empty{
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-align: center;
 }

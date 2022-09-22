@@ -1,8 +1,10 @@
 const customerList = document.querySelector("#customers");
 const newClient = document.querySelector("#newClient");
+const addClient = document.querySelector("#addClient");
+
 const modal = document.querySelector("#modal");
 const closeModal = document.querySelector("#closeModal");
-const addClient = document.querySelector("#addClient");
+
 const inputName = document.querySelector("#name");
 const inputAge = document.querySelector("#age");
 
@@ -18,10 +20,16 @@ class Client {
 
 const customers = [];
 
-//MODAL
+//Hide elements
 const hideModal = () => {
   modal.classList.toggle("active");
   modal.classList.toggle("desative");
+};
+
+const hideEdit = () => {
+  const editClient = document.querySelector("#editClient");
+  editClient.classList.toggle("active");
+  editClient.classList.toggle("desative");
 };
 
 //SAVE CUSTOMERS
@@ -36,17 +44,17 @@ const loadCustomers = () => {
 
 //CREATE
 const createClient = () => {
-  customerList.innerHTML = "";
   const newClient = new Client(inputName.value, inputAge.value);
   customers.push(newClient);
   saveCustomers(customers);
   readClient();
 };
 
-//READ
-const readClient = () => {
-  const DB_CUSTOMERS = loadCustomers();
+//CREATE LIST CUSTOMERS
+const createListCustomers = () => {
+  const DB_CUSTOMERS = readClient();
 
+  customerList.innerHTML = "";
   if (DB_CUSTOMERS) {
     DB_CUSTOMERS.map((client) => {
       customerList.innerHTML += `
@@ -56,25 +64,69 @@ const readClient = () => {
           <p>Nome: ${client.name}</p>
           <p>Idade: ${client.age}</p>
         </div>
-      <div class="btn-delete-edit">
-        <button>Editar</button>
-        <button>Deletar</button>
-      </div>
+        <div class="btn-delete-edit">
+          <button type="button" id="edit-${client.id}">Editar</button>
+          <button type="button" id="delete-${client.id}">Deletar</button>
+        </div>
       </div>
       `;
     });
   } else {
-    customerList.innerHTML = "VAZIO";
+    customerList.innerHTML = '<div id="empty">VAZIO</div>';
   }
+};
+
+//READ
+const readClient = () => {
+  return loadCustomers();
+};
+
+//FIND ID
+const findId = (e) => {
+  if (e.target.type === "button") {
+    const [action, index] = e.target.id.split("-");
+
+    if (action === "edit") {
+      const customers = loadCustomers();
+      fillInputs(customers[index]);
+    }
+    if (action === "delete") {
+      console.log("delete");
+    }
+  }
+};
+
+//GET INPUT VALUE
+const fillInputs = (client) => {
+  document.getElementById("nameEdit").value = client.name;
+  document.getElementById("ageEdit").value = client.age;
+  document.getElementById("id").value = client.id;
+  console.log(client.id);
+  hideEdit();
+};
+
+//SAVE NEW CUSTOMER DATA
+const saveNewCustomerData = () => {
+  const index = document.getElementById("id").value;
+  const data = {
+    id: index,
+    name: document.getElementById("nameEdit").value,
+    age: document.getElementById("ageEdit").value,
+  };
+  updateClient(index, data);
+  hideEdit();
 };
 
 //UPDATE
 const updateClient = (index, data) => {
-  customers[index] = {
-    name: data.name ? data.name : customers[index].name,
-    age: data.age ? data.age : customers[index].age,
+  const CUSTOMERS_DB = readClient();
+  CUSTOMERS_DB[index] = {
+    id: data.id,
+    name: data.name ? data.name : CUSTOMERS_DB[index].name,
+    age: data.age ? data.age : CUSTOMERS_DB[index].age,
   };
-  readClient();
+  saveCustomers(CUSTOMERS_DB); //save data to local storage
+  createListCustomers();
 };
 
 //DELETE
@@ -91,5 +143,12 @@ const deleteClient = (id) => {
 // updateClient(0, { age: "22"});
 // deleteClient(1);
 document.addEventListener("DOMContentLoaded", () => {
-  readClient();
+  createListCustomers();
+  document.querySelector(".close").addEventListener("click", hideEdit);
 });
+
+document.querySelector("#customers").addEventListener("click", findId);
+document
+  .querySelector("#saveEdit")
+  .addEventListener("click", saveNewCustomerData);
+newClient.addEventListener("click", hideModal);
