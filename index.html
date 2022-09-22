@@ -16,26 +16,35 @@
       <div class="new-client">
         <button id="newClient">Novo</button>
         <div id="modal" class="desative">
-            <div class="modal-newClient">
-                <button id="closeModal" onclick="hideModal()">Fechar</button>
-                <div class="client-data">
-                    <p>Novo Cliente</p>
-                    <input type="text" placeholder="Nome" id="name">
-                    <input type="text" placeholder="Idade" id="age">
-                    <button id="addClient" onclick="createClient()">Adicionar</button>
-                </div>
+          <div class="modal-newClient">
+            <button id="closeModal">Fechar</button>
+            <div class="client-data">
+              <p>Novo Cliente</p>
+              <input type="text" placeholder="Nome" id="name" />
+              <input type="text" placeholder="CNPJ/CPF" id="taxRegistration" />
+              <input type="text" placeholder="Contato" id="contact" />
+              <input type="text" placeholder="Endereço" id="address" />
+              <button id="addClient">Adicionar</button>
             </div>
+          </div>
         </div>
-        
+
         <div id="editClient" class="desative">
           <div class="edit">
-            <button class="close">Fechar</button>
+            <button class="close" id="closeEdit">Fechar</button>
             <div>
               <p>EDITAR USUÁRIO</p>
-              <input type="text" id="id" hidden>
-              <input type="text" id="nameEdit" placeholder="Nome">
-              <input type="text" id="ageEdit" placeholder="Idade">
-              <button>Cancelar</button>
+              <input type="text" id="id" hidden />
+              <input type="text" id="indexEdit" hidden />
+              <input type="text" id="nameEdit" placeholder="Nome" />
+              <input
+                type="text"
+                id="taxRegistrationEdit"
+                placeholder="CNPJ/CPF"
+              />
+              <input type="text" id="contactEdit" placeholder="Contato" />
+              <input type="text" id="addressEdit" placeholder="Endereço" />
+              <button id="cancelEdit">Cancelar</button>
               <button id="saveEdit">Salvar</button>
             </div>
           </div>

@@ -1,27 +1,36 @@
-const customerList = document.querySelector("#customers");
-const newClient = document.querySelector("#newClient");
-const addClient = document.querySelector("#addClient");
-
-const modal = document.querySelector("#modal");
-const closeModal = document.querySelector("#closeModal");
-
-const inputName = document.querySelector("#name");
-const inputAge = document.querySelector("#age");
-
-const SAVE_CUSTOMERS = "clientes";
+const customers = [];
+const SAVE_CUSTOMERS = "customers";
 
 class Client {
-  static lastId = 0;
-  constructor(name, age) {
-    this.id = Client.lastId++;
-    (this.name = name), (this.age = age);
+  constructor(name, taxRegistration, contact, address) {
+    this.id = checkId();
+    (this.name = name),
+      (this.taxRegistration = taxRegistration),
+      (this.contact = contact),
+      (this.address = address);
   }
 }
 
-const customers = [];
+//CREATE ID
+const generateId = () => {
+  return Math.random().toString(36).substring(2);
+};
+
+//CHECK DUPLICATE ID
+const checkId = () => {
+  const DB_CUSTOMERS = readClient();
+  const id = generateId();
+  const check = DB_CUSTOMERS.filter((client) => client.id === id);
+  if (check[0] === undefined) {
+    return id;
+  } else {
+    checkId();
+  }
+};
 
 //Hide elements
 const hideModal = () => {
+  const modal = document.querySelector("#modal");
   modal.classList.toggle("active");
   modal.classList.toggle("desative");
 };
@@ -47,32 +56,58 @@ const readClient = () => {
   return loadCustomers();
 };
 
+//INPUT VALUE
+const inputValue = () => {
+  document.getElementById("name").value = "";
+  document.getElementById("taxRegistration").value = "";
+  document.getElementById("contact").value = "";
+  document.getElementById("address").value = "";
+};
+const getInput = (a) => {
+  return document.querySelector(a);
+};
 //CREATE
 const createClient = () => {
-  const newClient = new Client(inputName.value, inputAge.value);
+  const inputName = getInput("#name");
+  const inputTaxRegistration = document.querySelector("#taxRegistration");
+  const inputContact = document.querySelector("#contact");
+  const inputAddress = document.querySelector("#address");
+
+  const newClient = new Client(
+    inputName.value,
+    inputTaxRegistration.value,
+    inputContact.value,
+    inputAddress.value
+  );
   const DB_CUSTOMERS = readClient() ? readClient() : [];
+
   DB_CUSTOMERS.push(newClient);
   saveCustomers(DB_CUSTOMERS);
+  hideModal();
+  inputValue();
   createListCustomers();
 };
 
 //CREATE LIST CUSTOMERS
 const createListCustomers = () => {
+  const customerList = document.querySelector("#customers");
+
   const DB_CUSTOMERS = readClient();
 
   customerList.innerHTML = "";
   if (DB_CUSTOMERS) {
-    DB_CUSTOMERS.map((client) => {
+    DB_CUSTOMERS.map((client, index) => {
       customerList.innerHTML += `
       <div id="${client.id}" class="client">
         <div class="customer-information">
-          <p>Cliente n° ${client.id + 1}</p>
           <p>Nome: ${client.name}</p>
-          <p>Idade: ${client.age}</p>
+          <p>CNPJ/CPF: ${client.taxRegistration}</p>
+          <p>Contato: ${client.contact}</p>
+          <p>Endereço: ${client.address}</p>
         </div>
         <div class="btn-delete-edit">
-          <button type="button" id="edit-${client.id}">Editar</button>
-          <button type="button" id="delete-${client.id}">Deletar</button>
+          <button type="button" id="edit-${index}">Editar</button>
+          <button type="button" id="delete-${index}">Deletar</button>
         </div>
       </div>
       `;
@@ -89,29 +124,37 @@ const findId = (e) => {
 
     if (action === "edit") {
       const CUSTOMERS_DB = readClient();
-      fillInputs(CUSTOMERS_DB[index]);
+      fillInputs(CUSTOMERS_DB[index], index);
     }
     if (action === "delete") {
-      deleteClient(index);
+      const CUSTOMERS_DB = readClient();
+      const id = CUSTOMERS_DB[index].id;
+      deleteClient(id);
     }
   }
 };
 
 //GET INPUT VALUE
-const fillInputs = (client) => {
-  document.getElementById("nameEdit").value = client.name;
-  document.getElementById("ageEdit").value = client.age;
+const fillInputs = (client, index) => {
+  document.getElementById("indexEdit").value = index;
   document.getElementById("id").value = client.id;
+  document.getElementById("nameEdit").value = client.name;
+  document.getElementById("taxRegistrationEdit").value = client.taxRegistration;
+  document.getElementById("contactEdit").value = client.contact;
+  document.getElementById("addressEdit").value = client.address;
+
   hideEdit();
 };
 
 //SAVE NEW CUSTOMER DATA
 const saveNewCustomerData = () => {
-  const index = document.getElementById("id").value;
+  const index = document.getElementById("indexEdit").value;
   const data = {
-    id: index,
+    id: document.getElementById("id").value,
     name: document.getElementById("nameEdit").value,
-    age: document.getElementById("ageEdit").value,
+    taxRegistration: document.getElementById("taxRegistrationEdit").value,
+    contact: document.getElementById("contactEdit").value,
+    address: document.getElementById("addressEdit").value,
   };
   updateClient(index, data);
   hideEdit();
@@ -121,9 +164,13 @@ const saveNewCustomerData = () => {
 const updateClient = (index, data) => {
   const CUSTOMERS_DB = readClient();
   CUSTOMERS_DB[index] = {
-    id: parseInt(data.id),
+    id: data.id,
     name: data.name ? data.name : CUSTOMERS_DB[index].name,
-    age: data.age ? data.age : CUSTOMERS_DB[index].age,
+    taxRegistration: data.taxRegistration
+      ? data.taxRegistration
+      : CUSTOMERS_DB[index].taxRegistration,
+    contact: data.contact ? data.contact : CUSTOMERS_DB[index].contact,
+    address: data.address ? data.address : CUSTOMERS_DB[index].address,
   };
   saveCustomers(CUSTOMERS_DB); //save data to local storage
   createListCustomers();
@@ -132,26 +179,21 @@ const updateClient = (index, data) => {
 //DELETE
 const deleteClient = (id) => {
   const CUSTOMERS_DB = readClient();
-  const registeredCustomers = CUSTOMERS_DB.filter(
-    (client) => client.id !== parseInt(id)
-  );
+  const registeredCustomers = CUSTOMERS_DB.filter((client) => client.id !== id);
   saveCustomers(registeredCustomers);
   createListCustomers();
 };
 
-// createClient("New Client", "Age");
-// setInterval(() => {
-//   readClient();
-// }, 5000);
-// updateClient(0, { age: "22"});
-// deleteClient(1);
 document.addEventListener("DOMContentLoaded", () => {
   createListCustomers();
-  document.querySelector(".close").addEventListener("click", hideEdit);
 });
 
 document.querySelector("#customers").addEventListener("click", findId);
+document.querySelector("#addClient").addEventListener("click", createClient);
+document.querySelector("#cancelEdit").addEventListener("click", hideEdit);
+document.querySelector("#closeEdit").addEventListener("click", hideEdit);
+document.querySelector("#newClient").addEventListener("click", hideModal);
+document.querySelector("#closeModal").addEventListener("click", hideModal);
 document
   .querySelector("#saveEdit")
   .addEventListener("click", saveNewCustomerData);
-newClient.addEventListener("click", hideModal);

@@ -37,8 +37,8 @@ header h1{
     margin: 10px auto;
     box-shadow: 0 0 5px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    position: relative;
 }
 
 .customer-information p{
@@ -46,15 +46,13 @@ header h1{
 }
 
 .btn-delete-edit{
-    max-width: 200px;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
 }
 
 .btn-delete-edit button{
     padding: 5px 10px;
-}
-
-.client{
-    position: relative;
 }
 
 #modal, #editClient{
@@ -72,7 +70,6 @@ header h1{
 
 #modal > div, .edit {
     width: 80%;
-    height: 300px;
     padding: 20px;
     background-color: white;
     border-radius: 5px;
