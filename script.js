@@ -1,4 +1,3 @@
-const customers = [];
 const SAVE_CUSTOMERS = "customers";
 
 class Client {
@@ -30,15 +29,13 @@ const checkId = () => {
 
 //Hide elements
 const hideModal = () => {
-  const modal = document.querySelector("#modal");
-  modal.classList.toggle("active");
-  modal.classList.toggle("desative");
+  document.querySelector("#modal").classList.toggle("active");
+  document.querySelector("#modal").classList.toggle("desative");
 };
 
 const hideEdit = () => {
-  const editClient = document.querySelector("#editClient");
-  editClient.classList.toggle("active");
-  editClient.classList.toggle("desative");
+  document.querySelector("#editClient").classList.toggle("active");
+  document.querySelector("#editClient").classList.toggle("desative");
 };
 
 //SAVE CUSTOMERS
@@ -53,7 +50,12 @@ const loadCustomers = () => {
 
 //READ
 const readClient = () => {
-  return loadCustomers();
+  const CUSTOMERS_DB = loadCustomers();
+  if (CUSTOMERS_DB) {
+    return CUSTOMERS_DB;
+  } else {
+    return [];
+  }
 };
 
 //INPUT VALUE
@@ -63,12 +65,10 @@ const inputValue = () => {
   document.getElementById("contact").value = "";
   document.getElementById("address").value = "";
 };
-const getInput = (a) => {
-  return document.querySelector(a);
-};
+
 //CREATE
 const createClient = () => {
-  const inputName = getInput("#name");
+  const inputName = document.querySelector("#name");
   const inputTaxRegistration = document.querySelector("#taxRegistration");
   const inputContact = document.querySelector("#contact");
   const inputAddress = document.querySelector("#address");
@@ -95,7 +95,7 @@ const createListCustomers = () => {
   const DB_CUSTOMERS = readClient();
 
   customerList.innerHTML = "";
-  if (DB_CUSTOMERS) {
+  if (DB_CUSTOMERS != "") {
     DB_CUSTOMERS.map((client, index) => {
       customerList.innerHTML += `
       <div id="${client.id}" class="client">
@@ -117,8 +117,8 @@ const createListCustomers = () => {
   }
 };
 
-//FIND ID
-const findId = (e) => {
+//KIND OF EVENT
+const kindOfEvent = (e) => {
   if (e.target.type === "button") {
     const [action, index] = e.target.id.split("-");
 
@@ -149,12 +149,18 @@ const fillInputs = (client, index) => {
 //SAVE NEW CUSTOMER DATA
 const saveNewCustomerData = () => {
   const index = document.getElementById("indexEdit").value;
+  const id = document.getElementById("id").value;
+  const name = document.getElementById("nameEdit").value;
+  const taxRegistration = document.getElementById("taxRegistrationEdit").value;
+  const contact = document.getElementById("contactEdit").value;
+  const address = document.getElementById("addressEdit").value;
+
   const data = {
-    id: document.getElementById("id").value,
-    name: document.getElementById("nameEdit").value,
-    taxRegistration: document.getElementById("taxRegistrationEdit").value,
-    contact: document.getElementById("contactEdit").value,
-    address: document.getElementById("addressEdit").value,
+    id,
+    name,
+    taxRegistration,
+    contact,
+    address,
   };
   updateClient(index, data);
   hideEdit();
@@ -188,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
   createListCustomers();
 });
 
-document.querySelector("#customers").addEventListener("click", findId);
+document.querySelector("#customers").addEventListener("click", kindOfEvent);
 document.querySelector("#addClient").addEventListener("click", createClient);
 document.querySelector("#cancelEdit").addEventListener("click", hideEdit);
 document.querySelector("#closeEdit").addEventListener("click", hideEdit);
