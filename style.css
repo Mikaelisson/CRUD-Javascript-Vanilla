@@ -74,12 +74,12 @@ header h1{
     position: relative;
 }
 
-.client-data, .edit > div{
+.client-data, .formEdit{
     display: flex;
     flex-direction: column;
 }
 
-.client-data p, .edit > div > p{
+.client-data p, .formEdit p{
     font-size: 2rem;
     font-weight: 700;
     text-align: center;
@@ -87,7 +87,7 @@ header h1{
 }
 
 /* inputs */
-.client-data input, .edit > div > input{
+.client-data input, .formEdit > input{
     width: 80%;
     background-color: #f2f2f2;
     border: 0;
@@ -95,6 +95,28 @@ header h1{
     padding: 15px 10px;
     padding-left: 15px;
     margin: 10px auto;
+}
+
+input:invalid{
+    background-color: #ff9999;
+    outline: #ff0000 solid 2px;
+    animation: input-animation .1s ;
+}
+
+input:valid{
+    outline: #00ccff solid 2px;
+}
+
+@keyframes input-animation {
+    0%{
+        transform: translateX(0);
+    }
+    25%{
+        transform: translateX(10px);
+    }
+    50%{
+        transform: translateX(-10px);
+    }
 }
 
 /* btns add e cancel */

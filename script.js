@@ -1,11 +1,25 @@
 const SAVE_CUSTOMERS = "customers";
 
+const customerList = document.querySelector("#customers");
+
+const inputName = document.querySelector("#name");
+const inputRegistration = document.querySelector("#registration");
+const inputPhone = document.querySelector("#phone");
+const inputAddress = document.querySelector("#address");
+
+const idInputEdit = document.querySelector("#id");
+const nameInputEdit = document.querySelector("#nameEdit");
+const registrationInputEdit = document.querySelector("#registrationEdit");
+const phoneInputEdit = document.querySelector("#phoneEdit");
+const addressInputEdit = document.querySelector("#addressEdit");
+
+//CLIENT DATA SCHEMA
 class Client {
-  constructor(name, registration, contact, address) {
+  constructor(name, registration, phone, address) {
     this.id = checkId();
     (this.name = name),
       (this.registration = registration),
-      (this.contact = contact),
+      (this.phone = phone),
       (this.address = address);
   }
 }
@@ -60,38 +74,46 @@ const readClient = () => {
 
 //INPUT VALUE
 const inputValue = () => {
-  document.getElementById("name").value = "";
-  document.getElementById("registration").value = "";
-  document.getElementById("contact").value = "";
-  document.getElementById("address").value = "";
+  inputName.value = "";
+  inputRegistration.value = "";
+  inputPhone.value = "";
+  inputAddress.value = "";
 };
 
 //CREATE
 const createClient = () => {
-  const inputName = document.querySelector("#name");
-  const inputRegistration = document.querySelector("#registration");
-  const inputContact = document.querySelector("#contact");
-  const inputAddress = document.querySelector("#address");
+  if (
+    inputName.value === "" ||
+    inputName.value === null ||
+    inputRegistration.value === "" ||
+    inputRegistration.value === null ||
+    registration.value.length < 11 ||
+    inputPhone.value === "" ||
+    inputPhone.value === null ||
+    inputPhone.value.length < 12 ||
+    inputAddress.value === "" ||
+    inputAddress.value === null
+  ) {
+    alert("Preencha todos os dados e tente novamente!");
+  } else {
+    const newClient = new Client(
+      inputName.value,
+      inputRegistration.value,
+      inputPhone.value,
+      inputAddress.value
+    );
+    const DB_CUSTOMERS = readClient() ? readClient() : [];
 
-  const newClient = new Client(
-    inputName.value,
-    inputRegistration.value,
-    inputContact.value,
-    inputAddress.value
-  );
-  const DB_CUSTOMERS = readClient() ? readClient() : [];
-
-  DB_CUSTOMERS.push(newClient);
-  saveCustomers(DB_CUSTOMERS);
-  hideModal();
-  inputValue();
-  createListCustomers();
+    DB_CUSTOMERS.push(newClient);
+    saveCustomers(DB_CUSTOMERS);
+    hideModal();
+    createListCustomers();
+    inputValue();
+  }
 };
 
 //CREATE LIST CUSTOMERS
 const createListCustomers = () => {
-  const customerList = document.querySelector("#customers");
-
   const DB_CUSTOMERS = readClient();
 
   customerList.innerHTML = "";
@@ -100,9 +122,10 @@ const createListCustomers = () => {
       customerList.innerHTML += `
       <div id="${client.id}" class="client">
         <div class="customer-information">
+          <p>ID: ${client.id}</p>
           <p>Nome: ${client.name}</p>
           <p>CNPJ/CPF: ${client.registration}</p>
-          <p>Contato: ${client.contact}</p>
+          <p>Telefone: ${client.phone}</p>
           <p>Endereço: ${client.address}</p>
         </div>
         <div class="btn-delete-edit">
@@ -137,11 +160,11 @@ const kindOfEvent = (e) => {
 //GET INPUT VALUE
 const fillInputs = (client, index) => {
   document.getElementById("indexEdit").value = index;
-  document.getElementById("id").value = client.id;
-  document.getElementById("nameEdit").value = client.name;
-  document.getElementById("registrationEdit").value = client.registration;
-  document.getElementById("contactEdit").value = client.contact;
-  document.getElementById("addressEdit").value = client.address;
+  idInputEdit.value = client.id;
+  nameInputEdit.value = client.name;
+  registrationInputEdit.value = client.registration;
+  phoneInputEdit.value = client.phone;
+  addressInputEdit.value = client.address;
 
   hideEdit();
 };
@@ -149,21 +172,28 @@ const fillInputs = (client, index) => {
 //SAVE NEW CUSTOMER DATA
 const saveNewCustomerData = () => {
   const index = document.getElementById("indexEdit").value;
-  const id = document.getElementById("id").value;
-  const name = document.getElementById("nameEdit").value;
-  const registration = document.getElementById("registrationEdit").value;
-  const contact = document.getElementById("contactEdit").value;
-  const address = document.getElementById("addressEdit").value;
-
-  const data = {
-    id,
-    name,
-    registration,
-    contact,
-    address,
-  };
-  updateClient(index, data);
-  hideEdit();
+  if (
+    nameInputEdit.value === "" ||
+    nameInputEdit.value === null ||
+    registrationInputEdit.value === "" ||
+    registrationInputEdit.value === null ||
+    phoneInputEdit.value === "" ||
+    phoneInputEdit.value === null ||
+    addressInputEdit.value === "" ||
+    addressInputEdit.value === null
+  ) {
+    alert("Preencha todos os dados e tente novamente!");
+  } else {
+    const data = {
+      id: idInputEdit.value,
+      name: nameInputEdit.value,
+      registration: registrationInputEdit.value,
+      phone: phoneInputEdit.value,
+      address: addressInputEdit.value,
+    };
+    updateClient(index, data);
+    hideEdit();
+  }
 };
 
 //UPDATE
@@ -175,7 +205,7 @@ const updateClient = (index, data) => {
     registration: data.registration
       ? data.registration
       : CUSTOMERS_DB[index].registration,
-    contact: data.contact ? data.contact : CUSTOMERS_DB[index].contact,
+    phone: data.phone ? data.phone : CUSTOMERS_DB[index].phone,
     address: data.address ? data.address : CUSTOMERS_DB[index].address,
   };
   saveCustomers(CUSTOMERS_DB); //save data to local storage
@@ -194,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
   createListCustomers();
 });
 
-document.querySelector("#customers").addEventListener("click", kindOfEvent);
+customerList.addEventListener("click", kindOfEvent);
 document.querySelector("#addClient").addEventListener("click", createClient);
 document.querySelector("#cancelEdit").addEventListener("click", hideEdit);
 document.querySelector("#closeEdit").addEventListener("click", hideEdit);
