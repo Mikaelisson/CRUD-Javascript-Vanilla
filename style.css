@@ -1,17 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+:root{
+    --font-color: #fff;
+    --btn-color: #00ccff;
+    --card-color: #f2f2f2;
+}
 
 body{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 header{
     display: flex;
     justify-content: center;
-    background-color: yellow;
+    color: var(--font-color);
+    background-color: var(--btn-color);
     padding: 20px;
 }
 
@@ -21,97 +29,110 @@ header h1{
 
 .new-client{
     display: flex;
-    justify-content: center;
-}
-
-.new-client button{
-    width: 500px;
-    padding: 10px 0;
-    margin: 10px 0;
-}
-
-.client{
-    max-width: 500px;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 10px auto;
-    box-shadow: 0 0 5px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.customer-information p{
-    margin: 5px 0;
-}
-
-.btn-delete-edit{
-    display: flex;
     justify-content: end;
-    gap: 10px;
 }
 
-.btn-delete-edit button{
-    padding: 5px 10px;
+/* btn add */
+#newClient{
+    color: var(--font-color);
+    background-color: var(--btn-color);
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    padding: 0;
+    margin: 10px 0;
+    margin-right: 10px;
+    border: 0;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
+#newClient:hover{
+    box-shadow: black 0 0 3px;
+}
+
+/* modal */
 #modal, #editClient{
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    /* display: flex; apagar */
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
 }
 
-#modal > div, .edit {
+.modal-newClient, .edit {
     width: 80%;
     padding: 20px;
-    background-color: white;
-    border-radius: 5px;
+    background-color: #fff;
+    border-radius: 10px;
 }
 
 .modal-newClient, .edit{
     position: relative;
 }
 
-.modal-newClient > button, .edit > button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 70px;
-    padding: 5px 10px;
-    margin: 0;
-}
-
 .client-data, .edit > div{
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
 }
 
 .client-data p, .edit > div > p{
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 700;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 15px 0;
 }
 
+/* inputs */
 .client-data input, .edit > div > input{
     width: 80%;
+    background-color: #f2f2f2;
+    border: 0;
+    border-radius: 10px;
+    padding: 15px 10px;
+    padding-left: 15px;
     margin: 10px auto;
-    padding: 10px;
 }
 
-.client-data button, .edit > div > button{
+/* btns add e cancel */
+.btn-cancel,.btn-add{
     width: 80%;
+    font-weight: 600;
+    padding: 10px 0;
     margin: 0 auto;
+    margin-top: 5px;
+    border: 0;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
+.btn-cancel{
+    color: #808080;
+    background-color: #fff;
+    border: #808080 solid 2px;
+}
+
+.btn-cancel:hover{
+    transition: .3s;
+    color: var(--font-color);
+    background-color: #808080;
+}
+
+.btn-add{    
+    color: var(--font-color);
+    background-color: #00ccff;
+    margin-bottom: 10px;
+}
+
+.btn-add:hover{
+    transition: box-shadow .3s;
+    box-shadow: #00ccff 0 0 10px;
+}
+
+/* hide components */
 .desative{
     display: none;
 }
@@ -120,8 +141,125 @@ header h1{
     display: flex;
 }
 
+
+/* div empty */
 #empty{
     font-weight: 700;
     font-size: 2.5rem;
     text-align: center;
+}
+
+/* btn close */
+.close{
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: #ff0000 solid 2px;
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    cursor: pointer;
+}
+
+.close::after{
+    content: "";
+    width: 20px;
+    height: 2px;
+    background-color: #ff0000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+.close::before{
+    content: "";
+    width: 20px;
+    height: 2px;
+    background-color: #ff0000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+
+.close:hover{
+    transition: .3s;
+    background-color: #ff0000;
+    border: #ff0000 solid 2px;
+    box-shadow: #ff0000 0 0 3px;
+}
+
+.close:hover::after{
+    background-color: #e6e6e6;
+    position: absolute;
+}
+.close:hover::before{
+    background-color: #e6e6e6;
+    position: absolute;
+}
+
+/* cards */
+.client{
+    width: 90%;
+    padding: 15px 0;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    background-color: var(--card-color);
+}
+
+.customer-information{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.customer-information p{
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0 15px;
+    margin: 5px 0;
+}
+
+.btn-delete-edit{
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    padding-top: 10px;
+    padding-right: 15px;
+}
+
+.btn-delete-edit button{
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.btn-edit{
+    color: #808080;
+    border: #808080 solid 2px;
+}
+
+.btn-edit:hover{
+    transition: .3s;
+    color: var(--font-color);
+    background-color: #808080;
+    border: transparent solid 2px;
+    box-shadow: #808080 0 0 3px;
+}
+
+.btn-delete{
+    color: #ff0000;
+    border: #ff0000 solid 2px;
+}
+
+.btn-delete:hover{
+    transition: .3s;
+    color: var(--font-color);
+    background-color: #ff0000;
+    border: transparent solid 2px;
+    box-shadow: #ff0000 0 0 3px;
 }
