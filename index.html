@@ -13,6 +13,7 @@
     </header>
 
     <main>
+      <!-- new client -->
       <div class="new-client">
         <button id="newClient">+</button>
         <div id="modal" class="desative">
@@ -24,24 +25,35 @@
               <input
                 type="text"
                 placeholder="CNPJ/CPF"
+                autocomplete="off"
                 id="registration"
+                pattern="[0-9]{11,14}"
                 minlength="11"
+                maxlength="14"
                 required
               />
               <input
                 type="tel"
-                placeholder="Telefone. Ex: 011999999999"
+                placeholder="Telefone. Ex: 11999999999"
                 id="phone"
-                minlength="12"
+                pattern="[0-9]{9,12}"
+                minlength="9"
                 required
               />
               <input type="text" placeholder="Endereço" id="address" required />
+              <input
+                type="text"
+                placeholder="Valor cliente"
+                id="invoice"
+                required
+              />
               <button id="cancelClient" class="btn-cancel">Cancelar</button>
               <button id="addClient" class="btn-add">Adicionar</button>
             </form>
           </div>
         </div>
 
+        <!-- edit client -->
         <div id="editClient" class="desative">
           <div class="edit">
             <button class="close" id="closeEdit"></button>
@@ -54,12 +66,16 @@
                 type="text"
                 id="registrationEdit"
                 placeholder="CNPJ/CPF"
+                autocomplete="off"
+                minlength="11"
+                maxlength="14"
                 required
               />
               <input
                 type="text"
                 id="phoneEdit"
-                placeholder="Contato"
+                placeholder="Telefone. Ex: 11999999999"
+                minlength="9"
                 required
               />
               <input
@@ -68,12 +84,19 @@
                 placeholder="Endereço"
                 required
               />
+              <input
+                type="text"
+                placeholder="Valor cliente"
+                id="invoiceEdit"
+                required
+              />
               <button id="cancelEdit" class="btn-cancel">Cancelar</button>
               <button id="saveEdit" class="btn-add">Salvar</button>
             </form>
           </div>
         </div>
       </div>
+      <!-- list customers -->
       <div id="customers"></div>
     </main>
 

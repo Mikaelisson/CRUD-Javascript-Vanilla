@@ -6,21 +6,24 @@ const inputName = document.querySelector("#name");
 const inputRegistration = document.querySelector("#registration");
 const inputPhone = document.querySelector("#phone");
 const inputAddress = document.querySelector("#address");
+const inputInvoice = document.querySelector("#invoice");
 
 const idInputEdit = document.querySelector("#id");
 const nameInputEdit = document.querySelector("#nameEdit");
 const registrationInputEdit = document.querySelector("#registrationEdit");
 const phoneInputEdit = document.querySelector("#phoneEdit");
 const addressInputEdit = document.querySelector("#addressEdit");
+const invoiceInputEdit = document.querySelector("#invoiceEdit");
 
 //CLIENT DATA SCHEMA
 class Client {
-  constructor(name, registration, phone, address) {
+  constructor(name, registration, phone, address, invoice) {
     this.id = checkId();
     (this.name = name),
       (this.registration = registration),
       (this.phone = phone),
-      (this.address = address);
+      (this.address = address),
+      (this.invoice = invoice);
   }
 }
 
@@ -78,6 +81,7 @@ const inputValue = () => {
   inputRegistration.value = "";
   inputPhone.value = "";
   inputAddress.value = "";
+  inputInvoice.value = "";
 };
 
 //CREATE
@@ -90,9 +94,11 @@ const createClient = () => {
     registration.value.length < 11 ||
     inputPhone.value === "" ||
     inputPhone.value === null ||
-    inputPhone.value.length < 12 ||
+    inputPhone.value.length < 9 ||
     inputAddress.value === "" ||
-    inputAddress.value === null
+    inputAddress.value === null ||
+    inputInvoice.value === "" ||
+    inputInvoice.value === null
   ) {
     alert("Preencha todos os dados e tente novamente!");
   } else {
@@ -100,7 +106,8 @@ const createClient = () => {
       inputName.value,
       inputRegistration.value,
       inputPhone.value,
-      inputAddress.value
+      inputAddress.value,
+      inputInvoice.value
     );
     const DB_CUSTOMERS = readClient() ? readClient() : [];
 
@@ -113,11 +120,29 @@ const createClient = () => {
 };
 
 //CREATE LIST CUSTOMERS
-const createListCustomers = () => {
+const createListCustomers = async () => {
   const DB_CUSTOMERS = readClient();
 
   customerList.innerHTML = "";
   if (DB_CUSTOMERS != "") {
+    let soma = 0;
+    for (let i = 0; i < DB_CUSTOMERS.length; i++) {
+      let invoicedAmount = parseFloat(
+        DB_CUSTOMERS[i].invoice.replace(".", "").replace(",", ".")
+      );
+      soma += invoicedAmount;
+    }
+
+    const BRL = soma.toLocaleString("pt-br", {
+      style: "currency",
+      currency: "BRL",
+    });
+
+    customerList.innerHTML += `
+      <div class="invoicing">
+        <p>Faturamento</p>
+        <p>${BRL}</p>
+      </div>`;
     DB_CUSTOMERS.map((client, index) => {
       customerList.innerHTML += `
       <div id="${client.id}" class="client">
@@ -127,6 +152,7 @@ const createListCustomers = () => {
           <p>CNPJ/CPF: ${client.registration}</p>
           <p>Telefone: ${client.phone}</p>
           <p>Endereço: ${client.address}</p>
+          <p>Valor: R$ ${client.invoice}</p>
         </div>
         <div class="btn-delete-edit">
           <button type="button" class="btn-edit" id="edit-${index}">Editar</button>
@@ -134,7 +160,7 @@ const createListCustomers = () => {
         </div>
       </div>
       `;
-    }).reverse();
+    });
   } else {
     customerList.innerHTML = '<div id="empty">VAZIO</div>';
   }
@@ -165,6 +191,7 @@ const fillInputs = (client, index) => {
   registrationInputEdit.value = client.registration;
   phoneInputEdit.value = client.phone;
   addressInputEdit.value = client.address;
+  invoiceInputEdit.value = client.invoice;
 
   hideEdit();
 };
@@ -180,7 +207,9 @@ const saveNewCustomerData = () => {
     phoneInputEdit.value === "" ||
     phoneInputEdit.value === null ||
     addressInputEdit.value === "" ||
-    addressInputEdit.value === null
+    addressInputEdit.value === null ||
+    invoiceInputEdit.value === "" ||
+    invoiceInputEdit.value === null
   ) {
     alert("Preencha todos os dados e tente novamente!");
   } else {
@@ -190,6 +219,7 @@ const saveNewCustomerData = () => {
       registration: registrationInputEdit.value,
       phone: phoneInputEdit.value,
       address: addressInputEdit.value,
+      invoice: invoiceInputEdit.value,
     };
     updateClient(index, data);
     hideEdit();
@@ -207,6 +237,7 @@ const updateClient = (index, data) => {
       : CUSTOMERS_DB[index].registration,
     phone: data.phone ? data.phone : CUSTOMERS_DB[index].phone,
     address: data.address ? data.address : CUSTOMERS_DB[index].address,
+    invoice: data.invoice ? data.invoice : CUSTOMERS_DB[index].invoice,
   };
   saveCustomers(CUSTOMERS_DB); //save data to local storage
   createListCustomers();
@@ -234,3 +265,13 @@ document.querySelector("#cancelClient").addEventListener("click", hideModal);
 document
   .querySelector("#saveEdit")
   .addEventListener("click", saveNewCustomerData);
+
+const convertBRL = (i) => {
+  var v = i.value.replace(/\D/g, "");
+  v = (v / 100).toFixed(2) + "";
+  v = v.replace(".", ",");
+  v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  i.value = v;
+};
+
+inputInvoice.addEventListener("keyup", () => convertBRL(inputInvoice));

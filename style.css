@@ -41,7 +41,6 @@ header h1{
     font-size: 25px;
     padding: 0;
     margin: 10px 0;
-    margin-right: 10px;
     border: 0;
     border-radius: 20px;
     cursor: pointer;
@@ -223,7 +222,7 @@ input:valid{
 
 /* cards */
 .client{
-    width: 90%;
+    width: 100%;
     padding: 15px 0;
     border-radius: 5px;
     margin: 0 auto;
@@ -284,4 +283,25 @@ input:valid{
     background-color: #ff0000;
     border: transparent solid 2px;
     box-shadow: #ff0000 0 0 3px;
+}
+main{
+    width: 90%;
+    margin: 0 auto;
+}
+
+/* invoicing */
+.invoicing{
+    max-width: 200px;
+    color: var(--font-color);
+    background-color: var(--btn-color);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.invoicing:hover{
+    transition: .3s;
+    box-shadow: gray 0 3px 3px;
+    transform: translateY(-4px);
 }
