@@ -57,7 +57,10 @@ const hideEdit = () => {
 
 //SAVE CUSTOMERS
 const saveCustomers = (customers) => {
-  return localStorage.setItem(SAVE_CUSTOMERS, JSON.stringify(customers));
+  return localStorage.setItem(
+    SAVE_CUSTOMERS,
+    JSON.stringify(customers.reverse())
+  );
 };
 
 //LOAD CUSTOMERS
@@ -82,6 +85,21 @@ const inputValue = () => {
   inputPhone.value = "";
   inputAddress.value = "";
   inputInvoice.value = "";
+};
+
+//MASK CPF OR CNPJ
+const formatCpfCnpj = (cpfOrCnpj) => {
+  if (cpfOrCnpj.length == 11) {
+    let cpf = cpfOrCnpj.replace(/^(\d{3})(\d{3})(\d{3})/, "$1.$2.$3-");
+    return cpf;
+  }
+  if (cpfOrCnpj.length == 14) {
+    let cnpj = cpfOrCnpj.replace(
+      /^(\d{2})(\d{3})(\d{3})(\d{4})/,
+      "$1.$2.$3/$4-"
+    );
+    return cnpj;
+  }
 };
 
 //CREATE
@@ -155,7 +173,7 @@ const createListCustomers = async () => {
         <div class="customer-information">
           <p>ID: ${client.id}</p>
           <p>Nome: ${client.name}</p>
-          <p>CNPJ/CPF: ${client.registration}</p>
+          <p>CNPJ/CPF: ${formatCpfCnpj(client.registration)}</p>
           <p>Telefone: ${client.phone}</p>
           <p>Endereço: ${client.address}</p>
           <p>Valor: R$ ${client.invoice}</p>
@@ -281,3 +299,4 @@ const convertBRL = (i) => {
 };
 
 inputInvoice.addEventListener("keyup", () => convertBRL(inputInvoice));
+invoiceInputEdit.addEventListener("keyup", () => convertBRL(invoiceInputEdit));
