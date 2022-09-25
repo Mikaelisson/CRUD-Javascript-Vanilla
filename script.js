@@ -1,6 +1,7 @@
 const SAVE_CUSTOMERS = "customers";
 
 const customerList = document.querySelector("#customers");
+const topBar = document.querySelector("#topBar");
 
 const inputName = document.querySelector("#name");
 const inputRegistration = document.querySelector("#registration");
@@ -103,45 +104,55 @@ const formatCpfCnpj = (cpfOrCnpj) => {
 };
 
 //CREATE
-const createClient = () => {
-  if (
-    inputName.value === "" ||
-    inputName.value === null ||
-    inputRegistration.value === "" ||
-    inputRegistration.value === null ||
-    registration.value.length < 11 ||
-    inputPhone.value === "" ||
-    inputPhone.value === null ||
-    inputPhone.value.length < 9 ||
-    inputAddress.value === "" ||
-    inputAddress.value === null ||
-    inputInvoice.value === "" ||
-    inputInvoice.value === null
-  ) {
-    alert("Preencha todos os dados e tente novamente!");
-  } else {
-    const newClient = new Client(
-      inputName.value,
-      inputRegistration.value,
-      inputPhone.value,
-      inputAddress.value,
-      inputInvoice.value
-    );
-    const DB_CUSTOMERS = readClient() ? readClient() : [];
+const createClient = (event) => {
+  event.preventDefault();
 
-    DB_CUSTOMERS.push(newClient);
-    saveCustomers(DB_CUSTOMERS);
-    hideModal();
-    createListCustomers();
-    inputValue();
+  if (
+    inputName.value !== "" &&
+    inputName.value !== null &&
+    inputRegistration.value !== "" &&
+    inputRegistration.value !== null &&
+    inputPhone.value !== "" &&
+    inputPhone.value !== null &&
+    inputPhone.value.length >= 9 &&
+    inputAddress.value !== "" &&
+    inputAddress.value !== null &&
+    inputInvoice.value !== "" &&
+    inputInvoice.value !== null
+  ) {
+    if (
+      inputRegistration.value.length === 11 ||
+      inputRegistration.value.length === 14
+    ) {
+      const newClient = new Client(
+        inputName.value,
+        inputRegistration.value,
+        inputPhone.value,
+        inputAddress.value,
+        inputInvoice.value
+      );
+      const DB_CUSTOMERS = readClient() ? readClient() : [];
+
+      DB_CUSTOMERS.push(newClient);
+      saveCustomers(DB_CUSTOMERS);
+      hideModal();
+      createListCustomers();
+      inputValue();
+    } else {
+      alert("CPF ou CNPJ inválido, preencha os dados e tente novamente!");
+    }
+  } else {
+    alert("Preencha todos os dados e tente novamente!");
   }
 };
 
 //CREATE LIST CUSTOMERS
-const createListCustomers = async () => {
+const createListCustomers = () => {
   const DB_CUSTOMERS = readClient();
 
   customerList.innerHTML = "";
+  topBar.innerHTML = "";
+
   if (DB_CUSTOMERS != "") {
     let soma = 0;
     for (let i = 0; i < DB_CUSTOMERS.length; i++) {
@@ -156,7 +167,7 @@ const createListCustomers = async () => {
       currency: "BRL",
     });
 
-    document.querySelector("#topBar").innerHTML = `
+    topBar.innerHTML = `
       <div class="card-topBar">
         <p>Faturamento</p>
         <p>${BRL}</p>
