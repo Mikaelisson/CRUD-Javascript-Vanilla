@@ -40,7 +40,7 @@ header h1{
     height: 40px;
     font-size: 25px;
     padding: 0;
-    margin: 10px 0;
+    margin-top: 10px;
     border: 0;
     border-radius: 20px;
     cursor: pointer;
@@ -289,9 +289,14 @@ main{
     margin: 0 auto;
 }
 
-/* invoicing */
-.invoicing{
-    max-width: 200px;
+/* top bar */
+#topBar{
+    display: flex;
+    gap: 10px;
+}
+
+.card-topBar{
+    min-width: 180px;
     color: var(--font-color);
     background-color: var(--btn-color);
     padding: 15px;
@@ -300,7 +305,7 @@ main{
     cursor: pointer;
 }
 
-.invoicing:hover{
+.card-topBar:hover{
     transition: .3s;
     box-shadow: gray 0 3px 3px;
     transform: translateY(-4px);

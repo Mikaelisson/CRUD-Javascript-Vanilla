@@ -138,11 +138,17 @@ const createListCustomers = async () => {
       currency: "BRL",
     });
 
-    customerList.innerHTML += `
-      <div class="invoicing">
+    document.querySelector("#topBar").innerHTML = `
+      <div class="card-topBar">
         <p>Faturamento</p>
         <p>${BRL}</p>
-      </div>`;
+      </div>
+      <div class="card-topBar">
+        <p>Total de clientes</p>
+        <p>${DB_CUSTOMERS.length} clientes</p>
+      </div>
+      `;
+
     DB_CUSTOMERS.map((client, index) => {
       customerList.innerHTML += `
       <div id="${client.id}" class="client">
