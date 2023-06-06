@@ -64,6 +64,12 @@ const saveCustomers = (customers) => {
   );
 };
 
+//RESET CUSTOMERS
+const resetCustomers = () => {
+  localStorage.setItem(SAVE_CUSTOMERS, JSON.stringify(""));
+  return createListCustomers();
+};
+
 //LOAD CUSTOMERS
 const loadCustomers = () => {
   return JSON.parse(localStorage.getItem(SAVE_CUSTOMERS));
@@ -292,6 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 customerList.addEventListener("click", kindOfEvent);
 document.querySelector("#addClient").addEventListener("click", createClient);
+document.querySelector("#reset").addEventListener("click", resetCustomers);
 document.querySelector("#cancelEdit").addEventListener("click", hideEdit);
 document.querySelector("#closeEdit").addEventListener("click", hideEdit);
 document.querySelector("#newClient").addEventListener("click", hideModal);
